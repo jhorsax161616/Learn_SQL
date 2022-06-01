@@ -1,0 +1,68 @@
+USE MASTER;
+GO
+
+IF EXISTS(SELECT * FROM SYS.DATABASES WHERE NAME='dbBodega')
+DROP DATABASE dbBodega;
+GO
+
+CREATE DATABASE dbBodega;
+GO
+
+USE dbBodega;
+GO
+
+CREATE TABLE tblCliente (
+DNI VARCHAR(8) PRIMARY KEY,
+cliApellidoPaterno VARCHAR(35) NOT NULL,
+cliApellidoMaterno VARCHAR(35),
+cliNombres VARCHAR(50) NOT NULL,
+cliSexo VARCHAR(9) NOT NULL,
+cliFechaNacimiento DATE NOT NULL,
+cliDireccion VARCHAR(180),
+cliDistrito VARCHAR(50),
+cliTelefono VARCHAR(15),
+cliEmail VARCHAR(80));
+
+CREATE TABLE tblEmpleado (
+IDEmpleado INT PRIMARY KEY,
+empNumSegSocial VARCHAR(10) NOT NULL,
+empApellidoPaterno VARCHAR(35) NOT NULL,
+empApellidoMaterno VARCHAR(35),
+empNombres VARCHAR(50) NOT NULL,
+empSueldo DECIMAL(7,2) NOT NULL);
+
+CREATE TABLE tblCategoria (
+IDCategoria VARCHAR(5) PRIMARY KEY,
+catNombre VARCHAR(40) NOT NULL);
+
+CREATE TABLE tblProveedor (
+RUC VARCHAR(11) PRIMARY KEY,
+provNombre VARCHAR(100) NOT NULL,
+provDireccion VARCHAR(180),
+provTelefono VARCHAR(15));
+
+CREATE TABLE tblVenta (
+IDVenta VARCHAR(9) PRIMARY KEY,
+venFecha DATE NOT NULL,
+DNI VARCHAR(8) NOT NULL,
+IDEmpleado INT NOT NULL,
+FOREIGN KEY (DNI) REFERENCES tblCliente(DNI),
+FOREIGN KEY (IDEmpleado) REFERENCES tblEmpleado(IDEmpleado));
+
+CREATE TABLE tblProducto (
+IDProducto VARCHAR(5) PRIMARY KEY,
+proNombre VARCHAR(100) NOT NULL,
+proPrecioVenta DECIMAL(7,2) NOT NULL,
+proStock INT NOT NULL,
+RUC VARCHAR(11) NOT NULL,
+IDCategoria VARCHAR(5) NOT NULL,
+FOREIGN KEY (RUC) REFERENCES tblProveedor(RUC),
+FOREIGN KEY (IDCategoria) REFERENCES tblCategoria(IDCategoria));
+
+CREATE TABLE tblDetalleVenta (
+IDVenta VARCHAR(9) NOT NULL,
+IDProducto VARCHAR(5) NOT NULL,
+dvenCantidad INT NOT NULL,
+PRIMARY KEY (IDVenta, IDProducto),
+FOREIGN KEY (IDVenta) REFERENCES tblVenta(IDVenta),
+FOREIGN KEY (IDProducto) REFERENCES tblProducto(IDProducto));
