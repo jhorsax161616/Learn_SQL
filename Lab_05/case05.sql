@@ -1,0 +1,58 @@
+CREATE DATABASE dbViajes
+GO
+
+USE dbViajes
+
+CREATE TABLE tblBus (
+Placa VARCHAR(6) PRIMARY KEY,
+busModelo VARCHAR(30) NOT NULL,
+busNroPisos INT NOT NULL,
+busCapacidad INT NOT NULL )
+
+CREATE TABLE tblChofer (
+DNI VARCHAR(10) PRIMARY KEY,
+choNombres VARCHAR(50) NOT NULL,
+choApPaterno VARCHAR(35) NOT NULL,
+choApMaterno VARCHAR(35),
+choFechaNac DATE NOT NULL,
+choTelefono VARCHAR(15),
+choEmail VARCHAR(100) )
+
+CREATE TABLE tblAgencia (
+IDAgencia VARCHAR(4) PRIMARY KEY,
+ageNombre VARCHAR(30) NOT NULL,
+ageDireccion VARCHAR(180) NOT NULL,
+ageDistrito VARCHAR(50) NOT NULL,
+ageProvincia VARCHAR(50) NOT NULL,
+agePais VARCHAR(50) NOT NULL )
+
+CREATE TABLE tblRuta (
+IDRuta VARCHAR(6) PRIMARY KEY,
+rutDistancia INT NOT NULL,
+IDAgenciaOrigen VARCHAR(4) NOT NULL,
+IDAgenciaDestino VARCHAR(4) NOT NULL,
+FOREIGN KEY (IDAgenciaOrigen) REFERENCES tblAgencia(IDAgencia),
+FOREIGN KEY (IDAgenciaDestino) REFERENCES tblAgencia(IDAgencia) )
+
+CREATE TABLE tblViaje (
+IDViaje VARCHAR(8) PRIMARY KEY,
+viaFecha DATE NOT NULL,
+viaHoraSalida TIME NOT NULL,
+viaHoraLlegada TIME NOT NULL,
+Placa VARCHAR(6) NOT NULL,
+IDRuta VARCHAR(6) NOT NULL,
+FOREIGN KEY (Placa) REFERENCES tblBus(Placa),
+FOREIGN KEY (IDRuta) REFERENCES tblRuta(IDRuta) )
+
+CREATE TABLE tblIncidente (
+IDIncidente VARCHAR(7) PRIMARY KEY,
+incDescripcion VARCHAR(180) NOT NULL,
+IDViaje VARCHAR(8) NOT NULL,
+FOREIGN KEY (IDViaje) REFERENCES tblViaje(IDViaje) )
+
+CREATE TABLE tblConduce (
+DNI VARCHAR(10) NOT NULL,
+IDViaje VARCHAR(8) NOT NULL,
+conRol VARCHAR(30) NOT NULL,
+FOREIGN KEY (DNI) REFERENCES tblChofer(DNI),
+FOREIGN KEY (IDViaje) REFERENCES tblViaje(IDViaje) )
