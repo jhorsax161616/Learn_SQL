@@ -1,0 +1,12 @@
+DECLARE @Id VARCHAR(5)
+EXEC @Id = ufcDevolverIdProducto 'Pez espada'
+PRINT @Id
+
+---
+
+DECLARE @MontoTotal DECIMAL(7, 2)
+EXEC @MontoTotal = ufcDevuelveMontoTotal '001-00997'
+PRINT @MontoTotal
+
+---
+
